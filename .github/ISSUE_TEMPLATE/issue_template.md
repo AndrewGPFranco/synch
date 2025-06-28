@@ -1,6 +1,7 @@
-## Tarefa
-***
+# Tarefa
+
 ### Passos obrigatórios:
+
 - [ ] Adicionar MR Back (caso tenha) [MR]()
 - [ ] Adicionar MR Front (caso tenha) [MR]()
 ***
