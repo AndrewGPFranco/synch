@@ -3,11 +3,3 @@
 
 -
 ***
-### Checklist:
-
--
-***
-### Observações (caso tenha):
-
--
-***
