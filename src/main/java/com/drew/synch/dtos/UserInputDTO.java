@@ -13,7 +13,6 @@ public record UserInputDTO(
         @NotBlank String fullname,
         @NotBlank String nickname,
         @NotBlank String password,
-        @NotBlank String pathImage,
         @NotNull LocalDate birthDate
 ) {
 }

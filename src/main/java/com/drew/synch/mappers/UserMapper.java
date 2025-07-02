@@ -19,7 +19,7 @@ public class UserMapper {
 
     public User dtoInputToEntity(UserInputDTO dto) {
         return User.builder().name(dto.name()).email(dto.email()).fullname(dto.fullname()).nickname(dto.nickname())
-                .password(encoder.encode(dto.password())).pathImage(dto.pathImage()).birthDate(dto.birthDate())
+                .password(encoder.encode(dto.password())).pathImage("").birthDate(dto.birthDate())
                 .roles(Set.of(RoleType.USER)).updateDate(null).registrationDate(LocalDateTime.now()).build();
     }
 
