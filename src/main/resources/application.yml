@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: "synch"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
