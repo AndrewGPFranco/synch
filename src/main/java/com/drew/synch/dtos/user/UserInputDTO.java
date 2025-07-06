@@ -1,4 +1,4 @@
-package com.drew.synch.dtos;
+package com.drew.synch.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.drew.synch.dtos;
+package com.drew.synch.dtos.user;
 
 import com.drew.synch.enums.RoleType;
 import jakarta.validation.constraints.NotBlank;

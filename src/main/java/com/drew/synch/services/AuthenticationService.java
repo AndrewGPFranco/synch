@@ -1,7 +1,7 @@
 package com.drew.synch.services;
 
-import com.drew.synch.dtos.UserInputDTO;
-import com.drew.synch.dtos.UserOutputDTO;
+import com.drew.synch.dtos.user.UserInputDTO;
+import com.drew.synch.dtos.user.UserOutputDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.exceptions.NotFoundException;
 import com.drew.synch.mappers.UserMapper;
@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Slf4j
 @Service

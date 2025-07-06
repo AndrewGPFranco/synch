@@ -30,12 +30,8 @@ public class FinanceTableMapper {
                 .createdAt(financeTable.getCreatedAt())
                 .updatedAt(financeTable.getUpdatedAt())
                 .expenses(financeTable.getExpenses())
-                .users(financeTable.getUsers())
+                .users(userFacade.returningListUserDTOs(financeTable.getUsers()))
                 .build();
-    }
-
-    private List<Long> returnListIdByUsers(List<User> users) {
-        return users.stream().map(User::getId).toList();
     }
 
 }

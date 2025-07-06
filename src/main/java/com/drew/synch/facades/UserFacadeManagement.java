@@ -1,5 +1,6 @@
 package com.drew.synch.facades;
 
+import com.drew.synch.dtos.user.UserDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,14 @@ public class UserFacadeManagement {
         list.addAll(userRepository.findAllById(usersId));
 
         return list;
+    }
+
+    public List<UserDTO> returningListUserDTOs(List<User> users) {
+        List<UserDTO> usersDTO = new ArrayList<>(users.size());
+
+        users.forEach(u -> usersDTO.add(new UserDTO(u.getName(), u.getEmail(), u.getNickname())));
+
+        return usersDTO;
     }
 
 }
