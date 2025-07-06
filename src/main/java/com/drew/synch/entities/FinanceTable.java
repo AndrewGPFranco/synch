@@ -2,6 +2,7 @@ package com.drew.synch.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-@Table(name = "finance_table")
+@Table(name = "finance_table", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
 public class FinanceTable {
 
     @Id
@@ -27,6 +28,11 @@ public class FinanceTable {
     @NotBlank
     @Column(name = "name")
     private String tableName;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
