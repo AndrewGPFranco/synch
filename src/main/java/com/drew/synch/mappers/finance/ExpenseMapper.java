@@ -1,0 +1,35 @@
+package com.drew.synch.mappers.finance;
+
+import com.drew.synch.dtos.finance.InputExpenseDTO;
+import com.drew.synch.dtos.finance.OutputExpenseDTO;
+import com.drew.synch.entities.Expense;
+import com.drew.synch.facades.FinanceFacadeManagement;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.time.Month;
+
+@Component
+@RequiredArgsConstructor
+public class ExpenseMapper {
+
+    private final FinanceFacadeManagement financeFacade;
+
+    public Expense toExpense(InputExpenseDTO dto) {
+        return Expense.builder()
+                .name(dto.name())
+                .month(Month.valueOf(dto.month().toUpperCase()))
+                .amount(dto.amount())
+                .financeTable(financeFacade.getFinanceTableById(dto.idTable()))
+                .build();
+    }
+
+    public OutputExpenseDTO toOutputExpense(Expense expense) {
+        return OutputExpenseDTO.builder()
+                .name(expense.getName())
+                .month(expense.getMonth())
+                .amount(expense.getAmount())
+                .build();
+    }
+
+}

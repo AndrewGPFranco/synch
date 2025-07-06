@@ -6,6 +6,7 @@ import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
 import com.drew.synch.services.FinanceTableService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ class FinanceTableController {
     @PostMapping
     ResponseEntity<ResponseAPI> createTable(@RequestBody InputFinanceTableDTO dto) {
         OutputFinanceTableDTO table = service.createTable(dto);
-        return ResponseEntity.ok().body(new ResponseAPI(table));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseAPI(table));
     }
 
     @GetMapping
