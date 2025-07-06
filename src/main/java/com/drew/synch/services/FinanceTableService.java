@@ -1,6 +1,7 @@
 package com.drew.synch.services;
 
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
+import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
 import com.drew.synch.mappers.finance.FinanceTableMapper;
 import com.drew.synch.repositories.FinanceTableRepository;
@@ -18,14 +19,17 @@ public class FinanceTableService {
     private final FinanceTableMapper financeTableMapper;
     private final FinanceTableRepository financeTableRepository;
 
-    public void createTable(InputFinanceTableDTO dto) {
+    public OutputFinanceTableDTO createTable(InputFinanceTableDTO dto) {
         try {
             log.info("Iniciando a criação da tabela de finanças. {}", dto);
             FinanceTable entity = financeTableMapper.toFinanceTable(dto);
-            financeTableRepository.save(entity);
+            FinanceTable savedFinance = financeTableRepository.save(entity);
             log.info("Tabela criada com sucesso!");
+
+            return financeTableMapper.toOutputFinanceTable(savedFinance);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            throw new RuntimeException("Ocorreu um erro ao criar a tabela, verifique os dados informados.");
         }
     }
 

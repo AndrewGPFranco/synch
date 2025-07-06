@@ -8,7 +8,8 @@ import java.util.List;
 
 @Builder
 public record InputFinanceTableDTO(
+        @NotNull(message = "É obrigatório a tabela pertencer a um usuário") Long idOwner,
         @NotBlank(message = "É obrigatório informar um nome para a tabela!") String tableName,
-        @NotNull(message = "É obrigatório colocar ao menos 1 usuário para a tabela!") List<Long> users
+        List<Long> users // Agora não mais not null, pois já tera o usuário proprietário
 ) {
 }

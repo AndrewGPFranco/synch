@@ -51,10 +51,11 @@ public class FinanceTable {
     @OneToMany(mappedBy = "financeTable", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Expense> expenses;
 
-    public FinanceTable(String tableName, List<User> users, List<Expense> expenses) {
+    public FinanceTable(String tableName, List<User> users, List<Expense> expenses, User user) {
         this.tableName = tableName;
         this.users = users;
         this.expenses = expenses;
+        this.user = user;
     }
 
     @Override

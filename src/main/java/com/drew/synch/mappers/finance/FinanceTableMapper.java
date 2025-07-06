@@ -1,6 +1,7 @@
 package com.drew.synch.mappers.finance;
 
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
+import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
 import com.drew.synch.entities.User;
 import com.drew.synch.facades.UserFacadeManagement;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -17,13 +19,18 @@ public class FinanceTableMapper {
     private final UserFacadeManagement userFacade;
 
     public FinanceTable toFinanceTable(InputFinanceTableDTO dto) {
-        return new FinanceTable(dto.tableName(), userFacade.returningListUsers(dto.users()), new ArrayList<>());
+        return new FinanceTable(dto.tableName(), userFacade.returningListUsers(dto.users()),
+                new ArrayList<>(), userFacade.returningListUsers(Collections.singletonList(dto.idOwner())).getFirst());
     }
 
-    public InputFinanceTableDTO toInputDtoFinanceTable(FinanceTable financeTable) {
-        return InputFinanceTableDTO.builder()
+    public OutputFinanceTableDTO toOutputFinanceTable(FinanceTable financeTable) {
+        return OutputFinanceTableDTO.builder()
+                .idTable(financeTable.getId())
                 .tableName(financeTable.getTableName())
-                .users(returnListIdByUsers(financeTable.getUsers()))
+                .createdAt(financeTable.getCreatedAt())
+                .updatedAt(financeTable.getUpdatedAt())
+                .expenses(financeTable.getExpenses())
+                .users(financeTable.getUsers())
                 .build();
     }
 

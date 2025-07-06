@@ -1,23 +1,27 @@
 package com.drew.synch.controllers;
 
+import com.drew.synch.dtos.ResponseAPI;
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
+import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
 import com.drew.synch.services.FinanceTableService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/finance")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/finance")
 class FinanceTableController {
 
     private final FinanceTableService service;
 
     @PostMapping
-    void createTable(@RequestBody InputFinanceTableDTO dto) {
-        service.createTable(dto);
+    ResponseEntity<ResponseAPI> createTable(@RequestBody InputFinanceTableDTO dto) {
+        OutputFinanceTableDTO table = service.createTable(dto);
+        return ResponseEntity.ok().body(new ResponseAPI(table));
     }
 
     @GetMapping
