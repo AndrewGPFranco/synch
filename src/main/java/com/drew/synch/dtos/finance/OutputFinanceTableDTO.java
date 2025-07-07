@@ -1,7 +1,6 @@
 package com.drew.synch.dtos.finance;
 
 import com.drew.synch.dtos.user.UserDTO;
-import com.drew.synch.entities.Expense;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -16,6 +15,6 @@ public record OutputFinanceTableDTO(
         @NotNull List<UserDTO> users,
         @NotNull LocalDateTime createdAt,
         @NotNull LocalDateTime updatedAt,
-        @NotNull List<Expense> expenses
+        @NotNull List<OutputExpenseDTO> expenses
 ) {
 }

@@ -26,14 +26,16 @@ public class FinanceTableService {
             FinanceTable savedFinance = financeTableRepository.save(entity);
             log.info("Tabela criada com sucesso!");
 
-            return financeTableMapper.toOutputFinanceTable(savedFinance);
+            return financeTableMapper.toOutputFinanceTable(savedFinance, dto.idOwner());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("Ocorreu um erro ao criar a tabela, verifique os dados informados.");
         }
     }
 
-    public List<FinanceTable> getTables() {
-        return financeTableRepository.findAll();
+    public List<OutputFinanceTableDTO> getTablesByUser(Long id) {
+        List<FinanceTable> userTables = financeTableRepository.findTablesByUser(id);
+
+        return userTables.stream().map(f -> financeTableMapper.toOutputFinanceTable(f, id)).toList();
     }
 }
