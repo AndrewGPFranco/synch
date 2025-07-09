@@ -19,14 +19,14 @@ public class FinanceTableService {
     private final FinanceTableMapper financeTableMapper;
     private final FinanceTableRepository financeTableRepository;
 
-    public OutputFinanceTableDTO createTable(InputFinanceTableDTO dto) {
+    public OutputFinanceTableDTO createTable(InputFinanceTableDTO dto, Long idOwner) {
         try {
             log.info("Iniciando a criação da tabela de finanças. {}", dto);
-            FinanceTable entity = financeTableMapper.toFinanceTable(dto);
+            FinanceTable entity = financeTableMapper.toFinanceTable(dto, idOwner);
             FinanceTable savedFinance = financeTableRepository.save(entity);
             log.info("Tabela criada com sucesso!");
 
-            return financeTableMapper.toOutputFinanceTable(savedFinance, dto.idOwner());
+            return financeTableMapper.toOutputFinanceTable(savedFinance, idOwner);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("Ocorreu um erro ao criar a tabela, verifique os dados informados.");

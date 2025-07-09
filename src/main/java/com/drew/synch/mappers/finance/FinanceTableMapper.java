@@ -24,9 +24,9 @@ public class FinanceTableMapper {
     private final UserFacadeManagement userFacade;
     private final FinanceFacadeManagement financeFacade;
 
-    public FinanceTable toFinanceTable(InputFinanceTableDTO dto) {
-        return new FinanceTable(dto.tableName(), userFacade.returningListUsers(dto.users()), new ArrayList<>(),
-                userFacade.returningListUsers(Collections.singletonList(dto.idOwner())).getFirst(), StatusType.TODO);
+    public FinanceTable toFinanceTable(InputFinanceTableDTO dto, Long idOwner) {
+        return new FinanceTable(dto.tableName(), userFacade.returningListUsers(List.of(idOwner)), new ArrayList<>(),
+                userFacade.returningListUsers(Collections.singletonList(idOwner)).getFirst(), StatusType.TODO);
     }
 
     public OutputFinanceTableDTO toOutputFinanceTable(FinanceTable financeTable, Long idUser) {

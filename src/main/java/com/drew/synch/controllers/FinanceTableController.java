@@ -21,8 +21,8 @@ class FinanceTableController {
     private final FinanceTableService service;
 
     @PostMapping
-    ResponseEntity<ResponseAPI> createTable(@RequestBody InputFinanceTableDTO dto) {
-        OutputFinanceTableDTO table = service.createTable(dto);
+    ResponseEntity<ResponseAPI> createTable(@RequestBody InputFinanceTableDTO dto, @AuthenticationPrincipal User user) {
+        OutputFinanceTableDTO table = service.createTable(dto, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseAPI(table));
     }
 
