@@ -40,7 +40,12 @@ public class FinanceTableService {
     }
 
     public void deleteTable(Long idUser, Long idTable) {
-        List<FinanceTable> userTables = financeTableRepository.findTablesByUser(idUser);
-        userTables.stream().filter(u -> u.getId().equals(idTable)).forEach(financeTableRepository::delete);
+        try {
+            List<FinanceTable> userTables = financeTableRepository.findTablesByUser(idUser);
+            userTables.stream().filter(u -> u.getId().equals(idTable)).forEach(financeTableRepository::delete);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(String.format("Ocorreu um erro ao deletar a tabela com ID %s.", idTable));
+        }
     }
 }
