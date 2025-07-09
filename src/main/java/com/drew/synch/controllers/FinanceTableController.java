@@ -32,4 +32,9 @@ class FinanceTableController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseAPI(tables));
     }
 
+    @DeleteMapping("/delete/{id}")
+    void deleteTableById(@AuthenticationPrincipal User user, @PathVariable Long id) {
+        service.deleteTable(user.getId(), id);
+    }
+
 }

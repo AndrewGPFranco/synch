@@ -38,4 +38,9 @@ public class FinanceTableService {
 
         return userTables.stream().map(f -> financeTableMapper.toOutputFinanceTable(f, id)).toList();
     }
+
+    public void deleteTable(Long idUser, Long idTable) {
+        List<FinanceTable> userTables = financeTableRepository.findTablesByUser(idUser);
+        userTables.stream().filter(u -> u.getId().equals(idTable)).forEach(financeTableRepository::delete);
+    }
 }
