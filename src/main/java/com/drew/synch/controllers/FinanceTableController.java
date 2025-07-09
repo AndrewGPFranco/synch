@@ -1,6 +1,7 @@
 package com.drew.synch.controllers;
 
 import com.drew.synch.dtos.ResponseAPI;
+import com.drew.synch.dtos.finance.InputEditTableNameDTO;
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
 import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.User;
@@ -35,6 +36,11 @@ class FinanceTableController {
     @DeleteMapping("/delete/{id}")
     void deleteTableById(@AuthenticationPrincipal User user, @PathVariable Long id) {
         service.deleteTable(user.getId(), id);
+    }
+
+    @PutMapping("/edit")
+    void editTableName(@AuthenticationPrincipal User user, @RequestBody InputEditTableNameDTO dto) {
+        service.editTableName(user.getId(), dto);
     }
 
 }

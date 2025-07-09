@@ -1,5 +1,6 @@
 package com.drew.synch.services;
 
+import com.drew.synch.dtos.finance.InputEditTableNameDTO;
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
 import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
@@ -46,6 +47,15 @@ public class FinanceTableService {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(String.format("Ocorreu um erro ao deletar a tabela com ID %s.", idTable));
+        }
+    }
+
+    public void editTableName(Long idUser, InputEditTableNameDTO dto) {
+        try {
+            financeTableRepository.editTableNameByUser(idUser, dto.idTable(), dto.newName());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(String.format("Ocorreu um erro ao editar o nome da tabela com ID %s.", dto.idTable()));
         }
     }
 }
