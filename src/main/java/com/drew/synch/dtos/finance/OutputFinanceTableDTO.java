@@ -15,6 +15,7 @@ public record OutputFinanceTableDTO(
         @NotNull List<UserDTO> users,
         @NotNull LocalDateTime createdAt,
         @NotNull LocalDateTime updatedAt,
-        @NotNull List<OutputExpenseDTO> expenses
+        @NotNull List<OutputExpenseDTO> expenses,
+        @NotNull String status
 ) {
 }

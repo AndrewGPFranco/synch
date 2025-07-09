@@ -56,11 +56,12 @@ public class FinanceTable {
     @Enumerated(EnumType.STRING)
     private StatusType status;
 
-    public FinanceTable(String tableName, List<User> users, List<Expense> expenses, User user) {
+    public FinanceTable(String tableName, List<User> users, List<Expense> expenses, User user, StatusType status) {
         this.tableName = tableName;
         this.users = users;
         this.expenses = expenses;
         this.user = user;
+        this.status = status;
     }
 
     @Override

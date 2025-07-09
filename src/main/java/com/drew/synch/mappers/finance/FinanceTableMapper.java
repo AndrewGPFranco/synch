@@ -5,6 +5,7 @@ import com.drew.synch.dtos.finance.OutputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.Expense;
 import com.drew.synch.entities.FinanceTable;
+import com.drew.synch.enums.StatusType;
 import com.drew.synch.facades.FinanceFacadeManagement;
 import com.drew.synch.facades.UserFacadeManagement;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class FinanceTableMapper {
     private final FinanceFacadeManagement financeFacade;
 
     public FinanceTable toFinanceTable(InputFinanceTableDTO dto) {
-        return new FinanceTable(dto.tableName(), userFacade.returningListUsers(dto.users()),
-                new ArrayList<>(), userFacade.returningListUsers(Collections.singletonList(dto.idOwner())).getFirst());
+        return new FinanceTable(dto.tableName(), userFacade.returningListUsers(dto.users()), new ArrayList<>(),
+                userFacade.returningListUsers(Collections.singletonList(dto.idOwner())).getFirst(), StatusType.TODO);
     }
 
     public OutputFinanceTableDTO toOutputFinanceTable(FinanceTable financeTable, Long idUser) {
@@ -36,12 +37,21 @@ public class FinanceTableMapper {
                 .updatedAt(financeTable.getUpdatedAt())
                 .expenses(getExpensesByUser(idUser))
                 .users(userFacade.returningListUserDTOs(financeTable.getUsers()))
+                .status(returnStatusTypeString(financeTable.getStatus()))
                 .build();
     }
 
     private List<OutputExpenseDTO> getExpensesByUser(Long idUser) {
         List<Expense> expensesByUser = financeFacade.getExpensesByUser(idUser);
         return expensesByUser.stream().map(expenseMapper::toOutputExpense).collect(Collectors.toList());
+    }
+
+    private String returnStatusTypeString(StatusType status) {
+        return switch (status) {
+            case COMPLETED -> StatusType.COMPLETED.getDescription();
+            case ONGOING -> StatusType.ONGOING.getDescription();
+            case TODO -> StatusType.TODO.getDescription();
+        };
     }
 
 }
