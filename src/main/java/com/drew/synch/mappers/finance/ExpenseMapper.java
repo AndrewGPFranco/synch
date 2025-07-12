@@ -21,6 +21,9 @@ public class ExpenseMapper {
                 .month(Month.valueOf(dto.month().toUpperCase()))
                 .amount(dto.amount())
                 .financeTable(financeFacade.getFinanceTableById(dto.idTable()))
+                .dueDate(dto.dueDate())
+                .paymentDate(dto.paymentDate())
+                .paymentCategory(dto.paymentCategory())
                 .build();
     }
 
@@ -30,6 +33,9 @@ public class ExpenseMapper {
                 .name(expense.getName())
                 .month(expense.getMonth())
                 .amount(expense.getAmount())
+                .dueDate(expense.getDueDate())
+                .paymentDate(expense.getPaymentDate())
+                .paymentCategory(expense.getPaymentCategory())
                 .build();
     }
 

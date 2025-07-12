@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum PaymentCategoryType {
 
     FIXED("Valor Fixo"),
-    VARIABLE("Valor variável"),
+    VARIABLE("Valor Variável"),
     UNFORESEEN("Valor Imprevisto");
 
     private final String description;
