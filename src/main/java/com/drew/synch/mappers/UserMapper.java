@@ -1,7 +1,7 @@
 package com.drew.synch.mappers;
 
-import com.drew.synch.dtos.UserInputDTO;
-import com.drew.synch.dtos.UserOutputDTO;
+import com.drew.synch.dtos.user.UserInputDTO;
+import com.drew.synch.dtos.user.UserOutputDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.enums.RoleType;
 import lombok.RequiredArgsConstructor;

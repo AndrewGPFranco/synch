@@ -1,9 +1,9 @@
 package com.drew.synch.controllers;
 
-import com.drew.synch.dtos.AuthRequestDTO;
+import com.drew.synch.dtos.user.AuthRequestDTO;
 import com.drew.synch.dtos.ResponseAPI;
-import com.drew.synch.dtos.UserInputDTO;
-import com.drew.synch.dtos.UserOutputDTO;
+import com.drew.synch.dtos.user.UserInputDTO;
+import com.drew.synch.dtos.user.UserOutputDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.services.AuthenticationService;
 import com.drew.synch.services.JwtService;
@@ -16,6 +16,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class AuthController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseAPI> getUserById(@Valid @PathVariable @NotNull Long id) {
+    public ResponseEntity<ResponseAPI> getUserById(@Valid @PathVariable @NotNull UUID id) {
         UserOutputDTO user = authService.getUserOutputById(id);
         return ResponseEntity.ok().body(new ResponseAPI(user));
     }

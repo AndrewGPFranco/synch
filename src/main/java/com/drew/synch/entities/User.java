@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -25,8 +26,8 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NotBlank(message = "O nome não pode estar em branco")
     @Size(max = 30, message = "O nome deve ter no máximo 30 caracteres")
@@ -85,7 +86,7 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "idExpense=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", fullname='" + fullname + '\'' +
