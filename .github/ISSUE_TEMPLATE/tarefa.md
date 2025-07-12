@@ -6,6 +6,8 @@ labels: feat
 assignees: AndrewGPFranco
 
 ---
+***
+### Passos Obrigatórios:
 
 - [ ] Adicionar MR Back (caso tenha) [MR]()
 - [ ] Adicionar MR Front (caso tenha) [MR]()
