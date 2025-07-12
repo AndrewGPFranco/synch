@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,12 +25,12 @@ public class FinanceTableMapper {
     private final UserFacadeManagement userFacade;
     private final FinanceFacadeManagement financeFacade;
 
-    public FinanceTable toFinanceTable(InputFinanceTableDTO dto, Long idOwner) {
+    public FinanceTable toFinanceTable(InputFinanceTableDTO dto, UUID idOwner) {
         return new FinanceTable(dto.tableName(), userFacade.returningListUsers(List.of(idOwner)), new ArrayList<>(),
                 userFacade.returningListUsers(Collections.singletonList(idOwner)).getFirst(), StatusType.TODO);
     }
 
-    public OutputFinanceTableDTO toOutputFinanceTable(FinanceTable financeTable, Long idUser) {
+    public OutputFinanceTableDTO toOutputFinanceTable(FinanceTable financeTable, UUID idUser) {
         return OutputFinanceTableDTO.builder()
                 .idTable(financeTable.getId())
                 .tableName(financeTable.getTableName())
@@ -41,7 +42,7 @@ public class FinanceTableMapper {
                 .build();
     }
 
-    private List<OutputExpenseDTO> getExpensesByUser(Long idUser) {
+    private List<OutputExpenseDTO> getExpensesByUser(UUID idUser) {
         List<Expense> expensesByUser = financeFacade.getExpensesByUser(idUser);
         return expensesByUser.stream().map(expenseMapper::toOutputExpense).collect(Collectors.toList());
     }

@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record InputEditTableNameDTO(
-        @NotNull Long idTable,
+        @NotNull UUID idTable,
         @NotBlank String newName
 ) {
 }

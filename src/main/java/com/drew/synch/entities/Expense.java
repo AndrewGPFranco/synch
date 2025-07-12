@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Month;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -17,8 +18,14 @@ import java.time.Month;
 public class Expense {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    // TODO: adicionar data de pagamento.
+
+    // TODO: adicionar se é despesa variavel ou fixa.
+
+    // TODO: adicionar se já foi pago ou não.
 
     @NotBlank
     private String name;
@@ -37,7 +44,7 @@ public class Expense {
     @Override
     public String toString() {
         return "Expense{" +
-                "id=" + id +
+                "idExpense=" + id +
                 ", name='" + name + '\'' +
                 ", month=" + month +
                 ", amount=" + amount +

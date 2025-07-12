@@ -17,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
@@ -47,7 +49,7 @@ public class AuthController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseAPI> getUserById(@Valid @PathVariable @NotNull Long id) {
+    public ResponseEntity<ResponseAPI> getUserById(@Valid @PathVariable @NotNull UUID id) {
         UserOutputDTO user = authService.getUserOutputById(id);
         return ResponseEntity.ok().body(new ResponseAPI(user));
     }

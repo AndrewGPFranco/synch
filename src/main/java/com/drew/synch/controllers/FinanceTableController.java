@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ class FinanceTableController {
     }
 
     @DeleteMapping("/delete/{id}")
-    void deleteTableById(@AuthenticationPrincipal User user, @PathVariable Long id) {
+    void deleteTableById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
         service.deleteTable(user.getId(), id);
     }
 

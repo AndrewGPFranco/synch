@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -20,7 +21,7 @@ public class FinanceTableService {
     private final FinanceTableMapper financeTableMapper;
     private final FinanceTableRepository financeTableRepository;
 
-    public OutputFinanceTableDTO createTable(InputFinanceTableDTO dto, Long idOwner) {
+    public OutputFinanceTableDTO createTable(InputFinanceTableDTO dto, UUID idOwner) {
         try {
             log.info("Iniciando a criação da tabela de finanças. {}", dto);
             FinanceTable entity = financeTableMapper.toFinanceTable(dto, idOwner);
@@ -34,13 +35,13 @@ public class FinanceTableService {
         }
     }
 
-    public List<OutputFinanceTableDTO> getTablesByUser(Long id) {
+    public List<OutputFinanceTableDTO> getTablesByUser(UUID id) {
         List<FinanceTable> userTables = financeTableRepository.findTablesByUser(id);
 
         return userTables.stream().map(f -> financeTableMapper.toOutputFinanceTable(f, id)).toList();
     }
 
-    public void deleteTable(Long idUser, Long idTable) {
+    public void deleteTable(UUID idUser, UUID idTable) {
         try {
             List<FinanceTable> userTables = financeTableRepository.findTablesByUser(idUser);
             userTables.stream().filter(u -> u.getId().equals(idTable)).forEach(financeTableRepository::delete);
@@ -50,7 +51,7 @@ public class FinanceTableService {
         }
     }
 
-    public void editTableName(Long idUser, InputEditTableNameDTO dto) {
+    public void editTableName(UUID idUser, InputEditTableNameDTO dto) {
         try {
             financeTableRepository.editTableNameByUser(idUser, dto.idTable(), dto.newName());
         } catch (Exception e) {

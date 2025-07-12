@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class UserFacadeManagement {
      * @param usersId a ser procurado no banco.
      * @return lista com os Usuários.
      */
-    public List<User> returningListUsers(List<Long> usersId) {
+    public List<User> returningListUsers(List<UUID> usersId) {
         List<User> list = new ArrayList<>(usersId.size());
         list.addAll(userRepository.findAllById(usersId));
 

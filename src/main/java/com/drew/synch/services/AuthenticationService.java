@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,12 +36,12 @@ public class AuthenticationService {
         }
     }
 
-    public UserOutputDTO getUserOutputById(Long id) {
+    public UserOutputDTO getUserOutputById(UUID id) {
         User user = getUserById(id);
         return userMapper.entityToDtoOutput(user);
     }
 
-    protected User getUserById(Long id) {
+    protected User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Nenhum registro encontrado com o ID: " + id));
     }

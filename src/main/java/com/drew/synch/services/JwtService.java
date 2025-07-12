@@ -25,7 +25,7 @@ public class JwtService {
             return JWT.create()
                     .withIssuer("synch")
                     .withSubject(user.getNickname())
-                    .withClaim("id", user.getId())
+                    .withClaim("id", user.getId().toString())
                     .withClaim("email", user.getEmail())
                     .withClaim("roles", user.getRoles().stream().map(RoleType::getRole).toList())
                     .withExpiresAt(tokenExpirationDate())

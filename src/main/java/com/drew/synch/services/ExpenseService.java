@@ -8,10 +8,13 @@ import com.drew.synch.facades.FinanceFacadeManagement;
 import com.drew.synch.mappers.finance.ExpenseMapper;
 import com.drew.synch.repositories.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExpenseService {
@@ -36,6 +39,15 @@ public class ExpenseService {
         financeFacade.saveFinanceTable(financeTable);
 
         return expenseMapper.toOutputExpense(expense);
+    }
+    
+    public void deleteExpenseByIDAndUser(UUID idExpense) {
+        try {
+            expenseRepository.deleteExpenseByID(idExpense);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

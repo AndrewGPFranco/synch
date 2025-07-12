@@ -11,15 +11,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface FinanceTableRepository extends JpaRepository<FinanceTable, Long> {
+public interface FinanceTableRepository extends JpaRepository<FinanceTable, UUID> {
 
     @Query("select ft from FinanceTable ft where ft.user.id = :idUser")
-    List<FinanceTable> findTablesByUser(@Param("idUser") Long idUser);
+    List<FinanceTable> findTablesByUser(@Param("idUser") UUID idUser);
 
     @Modifying
     @Transactional
     @Query("update FinanceTable ft set ft.tableName = :newName where ft.id = :idTable and ft.user.id = :idUser")
-    void editTableNameByUser(@Param("idUser") @NotNull Long idUser, @Param("idTable") @NotNull Long idTable, @Param("newName") @NotBlank String newName);
+    void editTableNameByUser(@Param("idUser") @NotNull UUID idUser, @Param("idTable") @NotNull UUID idTable, @Param("newName") @NotBlank String newName);
 }

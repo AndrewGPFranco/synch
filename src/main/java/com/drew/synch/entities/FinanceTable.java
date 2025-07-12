@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -23,8 +24,8 @@ import java.util.List;
 public class FinanceTable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NotBlank
     @Column(name = "name")
@@ -67,7 +68,7 @@ public class FinanceTable {
     @Override
     public String toString() {
         return "FinanceTable{" +
-                "id=" + id +
+                "idExpense=" + id +
                 ", tableName='" + tableName + '\'' +
                 ", users=" + users +
                 ", createdAt=" + createdAt +

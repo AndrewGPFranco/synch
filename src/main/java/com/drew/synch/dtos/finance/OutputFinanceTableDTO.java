@@ -7,10 +7,11 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 public record OutputFinanceTableDTO(
-        @NotNull Long idTable,
+        @NotNull UUID idTable,
         @NotBlank String tableName,
         @NotNull List<UserDTO> users,
         @NotNull LocalDateTime createdAt,

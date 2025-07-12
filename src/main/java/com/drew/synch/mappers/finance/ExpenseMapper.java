@@ -26,6 +26,7 @@ public class ExpenseMapper {
 
     public OutputExpenseDTO toOutputExpense(Expense expense) {
         return OutputExpenseDTO.builder()
+                .idExpense(expense.getId())
                 .name(expense.getName())
                 .month(expense.getMonth())
                 .amount(expense.getAmount())
