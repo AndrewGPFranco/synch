@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -35,6 +37,10 @@ public class UserFacadeManagement {
         users.forEach(u -> usersDTO.add(new UserDTO(u.getName(), u.getEmail(), u.getNickname())));
 
         return usersDTO;
+    }
+
+    public Set<User> returningSetUsers(Set<String> emailUsers) {
+        return emailUsers.stream().map(userRepository::findByEmail).collect(Collectors.toSet());
     }
 
 }

@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -28,8 +29,13 @@ public class NotificationAccessTable extends NotificationBase {
     @ManyToOne(fetch = FetchType.EAGER)
     private User userOwner;
 
-    @Transient
-    private List<User> users;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "notification_access_users",
+            joinColumns = @JoinColumn(name = "notification_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users;
 
     @NotBlank
     @Column(name = "content_message", nullable = false)
