@@ -26,6 +26,9 @@ public class NotificationService {
     public void createNewNotification(InputNotificationAccessTableDTO dto) {
         try {
             NotificationAccessTable entity = notificationMapper.dtoToNotificationAccessTable(dto);
+
+            entity.getUsers().forEach(user -> user.setNotification(entity));
+
             notificationAccessTableRepository.save(entity);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -46,7 +49,8 @@ public class NotificationService {
                     for (NotificationAccessTable notification : allNotifications) {
                         boolean has = notification.listUsers().stream()
                                 .anyMatch(user -> user.id().equals(idUser));
-                        if (has && (!notification.wasExpired() || !notification.isWasReadDestination())) {
+                        // TODO: verificar se o usuário já leu a notificação
+                        if (has && (!notification.wasExpired())) {
                             notificationUser.add(OutputNotificationAccessTableDTO.builder().creatorUser(
                                             createUserDTOCreatorNotification(notification.getUserOwner())
                                     )
@@ -68,5 +72,9 @@ public class NotificationService {
 
     private UserDTO createUserDTOCreatorNotification(User creatorUser) {
         return UserDTO.builder().name(creatorUser.getName()).nickname(creatorUser.getNickname()).build();
+    }
+
+    public void markAsReadByUser(UUID idUser, UUID idNotification) {
+
     }
 }

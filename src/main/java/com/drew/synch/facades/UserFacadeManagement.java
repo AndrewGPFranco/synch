@@ -1,6 +1,7 @@
 package com.drew.synch.facades;
 
 import com.drew.synch.dtos.user.UserDTO;
+import com.drew.synch.entities.NotificationAccessUser;
 import com.drew.synch.entities.User;
 import com.drew.synch.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,13 @@ public class UserFacadeManagement {
         return usersDTO;
     }
 
-    public Set<User> returningSetUsers(Set<String> emailUsers) {
-        return emailUsers.stream().map(userRepository::findByEmail).collect(Collectors.toSet());
+    public List<NotificationAccessUser> returningListUsers(Set<String> emailUsers) {
+        Set<User> users = emailUsers.stream().map(userRepository::findByEmail).collect(Collectors.toSet());
+        return users.stream().map(user -> NotificationAccessUser.builder()
+                .user(user)
+                .wasRead(false)
+                .notification(null)
+                .build()).toList();
     }
 
 }

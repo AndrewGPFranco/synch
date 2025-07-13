@@ -9,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -22,6 +21,7 @@ import java.util.UUID;
 public class NotificationAccessTable extends NotificationBase {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
@@ -29,26 +29,19 @@ public class NotificationAccessTable extends NotificationBase {
     @ManyToOne(fetch = FetchType.EAGER)
     private User userOwner;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "notification_access_users",
-            joinColumns = @JoinColumn(name = "notification_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users;
-
     @NotBlank
     @Column(name = "content_message", nullable = false)
     private String contentMessage;
 
-    @Column(name = "was_read_destination")
-    private boolean wasReadDestination;
-
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "was_expired")
     private boolean wasExpired = false;
+
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<NotificationAccessUser> users;
 
     @Override
     public String nameNotification() {
@@ -60,9 +53,9 @@ public class NotificationAccessTable extends NotificationBase {
         return this.users.stream()
                 .map(u -> UserDTO.builder()
                         .id(u.getId())
-                        .name(u.getName())
-                        .email(u.getEmail())
-                        .nickname(u.getNickname())
+                        .name(u.getUser().getName())
+                        .email(u.getUser().getEmail())
+                        .nickname(u.getUser().getNickname())
                         .build())
                 .toList();
     }
@@ -82,11 +75,10 @@ public class NotificationAccessTable extends NotificationBase {
         return "NotificationAccessTable{" +
                 "id=" + id +
                 ", userOwner=" + userOwner +
-                ", users=" + users +
                 ", contentMessage='" + contentMessage + '\'' +
-                ", wasReadDestination=" + wasReadDestination +
                 ", createdAt=" + createdAt +
                 ", wasExpired=" + wasExpired +
+                ", users=" + users +
                 '}';
     }
 }

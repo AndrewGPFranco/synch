@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +34,12 @@ class NotificationController {
     ResponseEntity<ResponseAPI> checkIfContainsNewNotifications(@AuthenticationPrincipal User user) {
         List<OutputNotificationAccessTableDTO> outputNotificationAccessTableDTOS = notificationService.checkIfContainsNewNotifications(user.getId());
         return ResponseEntity.ok(new ResponseAPI(outputNotificationAccessTableDTOS));
+    }
+
+    @PutMapping("/mark-as-read-by-user/{idNotification}")
+    ResponseEntity<ResponseAPI> markAsReadByUser(@AuthenticationPrincipal User user, @PathVariable UUID idNotification) {
+        notificationService.markAsReadByUser(user.getId(), idNotification);
+        return ResponseEntity.ok(new ResponseAPI(null));
     }
 
 }
