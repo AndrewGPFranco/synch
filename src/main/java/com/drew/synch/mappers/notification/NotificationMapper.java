@@ -20,7 +20,7 @@ public class NotificationMapper {
                 .contentMessage(dto.getMessage())
                 .createdAt(LocalDateTime.now())
                 .userOwner(dto.getUserOwner())
-                .users(userFacade.returningListUsers(dto.getDestinationUsers()))
+                .notificationUsers(userFacade.returningListUsers(dto.getDestinationUsers()))
                 .wasExpired(false)
                 .build();
     }

@@ -4,6 +4,7 @@ import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
 import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
 import com.drew.synch.dtos.user.UserDTO;
 import com.drew.synch.entities.NotificationAccessTable;
+import com.drew.synch.entities.NotificationAccessUser;
 import com.drew.synch.entities.User;
 import com.drew.synch.mappers.notification.NotificationMapper;
 import com.drew.synch.repositories.NotificationAccessTableRepository;
@@ -27,7 +28,7 @@ public class NotificationService {
         try {
             NotificationAccessTable entity = notificationMapper.dtoToNotificationAccessTable(dto);
 
-            entity.getUsers().forEach(user -> user.setNotification(entity));
+            entity.getNotificationUsers().forEach(user -> user.setNotification(entity));
 
             notificationAccessTableRepository.save(entity);
         } catch (Exception e) {
@@ -49,13 +50,19 @@ public class NotificationService {
                     for (NotificationAccessTable notification : allNotifications) {
                         boolean has = notification.listUsers().stream()
                                 .anyMatch(user -> user.id().equals(idUser));
-                        // TODO: verificar se o usuário já leu a notificação
-                        if (has && (!notification.wasExpired())) {
-                            notificationUser.add(OutputNotificationAccessTableDTO.builder().creatorUser(
-                                            createUserDTOCreatorNotification(notification.getUserOwner())
-                                    )
-                                    .messageContent(notification.getContentMessage())
-                                    .build());
+                        if (has) {
+                            List<NotificationAccessUser> listNotificationNotRead = notification.getNotificationUsers()
+                                    .stream().filter(n -> !n.isWasRead()).toList();
+
+                            for (NotificationAccessUser notificationAccessUser : listNotificationNotRead) {
+                                if (notificationAccessUser.getNotification().equals(notification)) {
+                                    notificationUser.add(OutputNotificationAccessTableDTO.builder().creatorUser(
+                                                    createUserDTOCreatorNotification(notification.getUserOwner())
+                                            )
+                                            .messageContent(notification.getContentMessage())
+                                            .build());
+                                }
+                            }
                         }
                     }
 

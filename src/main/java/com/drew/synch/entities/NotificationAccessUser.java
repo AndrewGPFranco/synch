@@ -1,5 +1,6 @@
 package com.drew.synch.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class NotificationAccessUser {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "notification_id", nullable = false)
     private NotificationAccessTable notification;
@@ -36,7 +38,6 @@ public class NotificationAccessUser {
     public String toString() {
         return "NotificationAccessUser{" +
                 "id=" + id +
-                ", notification=" + notification +
                 ", wasRead=" + wasRead +
                 '}';
     }

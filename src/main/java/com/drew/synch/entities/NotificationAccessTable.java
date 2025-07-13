@@ -41,7 +41,7 @@ public class NotificationAccessTable extends NotificationBase {
     private boolean wasExpired = false;
 
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<NotificationAccessUser> users;
+    private List<NotificationAccessUser> notificationUsers;
 
     @Override
     public String nameNotification() {
@@ -50,9 +50,9 @@ public class NotificationAccessTable extends NotificationBase {
 
     @Override
     public List<UserDTO> listUsers() {
-        return this.users.stream()
+        return this.notificationUsers.stream()
                 .map(u -> UserDTO.builder()
-                        .id(u.getId())
+                        .id(u.getUser().getId())
                         .name(u.getUser().getName())
                         .email(u.getUser().getEmail())
                         .nickname(u.getUser().getNickname())
@@ -78,7 +78,7 @@ public class NotificationAccessTable extends NotificationBase {
                 ", contentMessage='" + contentMessage + '\'' +
                 ", createdAt=" + createdAt +
                 ", wasExpired=" + wasExpired +
-                ", users=" + users +
+                ", users=" + notificationUsers +
                 '}';
     }
 }
