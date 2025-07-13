@@ -8,6 +8,7 @@ import com.drew.synch.entities.NotificationAccessUser;
 import com.drew.synch.entities.User;
 import com.drew.synch.mappers.notification.NotificationMapper;
 import com.drew.synch.repositories.NotificationAccessTableRepository;
+import com.drew.synch.repositories.NotificationAccessUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class NotificationService {
 
     private final NotificationMapper notificationMapper;
+    private final NotificationAccessUserRepository notificationAccessUserRepository;
     private final NotificationAccessTableRepository notificationAccessTableRepository;
 
     public void createNewNotification(InputNotificationAccessTableDTO dto) {
@@ -82,6 +84,11 @@ public class NotificationService {
     }
 
     public void markAsReadByUser(UUID idUser, UUID idNotification) {
-
+        try {
+            notificationAccessUserRepository.markNotificationAsRead(idUser, idNotification);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("Ocorreu um erro ao atualizar a leitura da notificação!");
+        }
     }
 }
