@@ -17,4 +17,23 @@ public interface NotificationAccessUserRepository extends JpaRepository<Notifica
     @Transactional
     @Query("update NotificationAccessUser nau set nau.wasRead = true where nau.user.id = :idUser and nau.notification.id = :idNotification")
     void markNotificationAsRead(@Param("idUser") UUID idUser, @Param("idNotification") UUID idNotification);
+
+    @Modifying
+    @Transactional
+    @Query("update NotificationAccessUser nau set nau.wasRead = true where nau.user.id = :idUser")
+    void markAllAsReadByUser(@Param("idUser") UUID idUser);
+
+    @Modifying
+    @Transactional
+    @Query("delete from NotificationAccessUser nau where nau.user.id = :idUser")
+    void deleteAllByUser(@Param("idUser") UUID idUser);
+
+    @Modifying
+    @Transactional
+    @Query("delete from NotificationAccessUser nau where nau.user.id = :idUser and nau.notification.id = :idNotification")
+    void deleteNotificationByUser(@Param("idUser") UUID idUser, @Param("idNotification") UUID idNotification);
+
+    @Query(value = "select count(*) from notification_access_users nau where nau.notification_id = :idNotification and nau.user_id != :idUser", nativeQuery = true)
+    Integer checkIfItHasUserNotifications(@Param("idNotification") UUID idNotification, @Param("idUser") UUID idUser);
+
 }

@@ -5,13 +5,14 @@ import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
 import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.services.NotificationService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -32,14 +33,28 @@ class NotificationController {
 
     @GetMapping("/check-contains-notifications")
     ResponseEntity<ResponseAPI> checkIfContainsNewNotifications(@AuthenticationPrincipal User user) {
-        List<OutputNotificationAccessTableDTO> outputNotificationAccessTableDTOS = notificationService.checkIfContainsNewNotifications(user.getId());
+        Set<OutputNotificationAccessTableDTO> outputNotificationAccessTableDTOS = notificationService.checkIfContainsNewNotifications(user.getId());
         return ResponseEntity.ok(new ResponseAPI(outputNotificationAccessTableDTOS));
     }
 
     @PutMapping("/mark-as-read-by-user/{idNotification}")
-    ResponseEntity<ResponseAPI> markAsReadByUser(@AuthenticationPrincipal User user, @PathVariable UUID idNotification) {
+    void markAsReadByUser(@AuthenticationPrincipal User user, @PathVariable UUID idNotification) {
         notificationService.markAsReadByUser(user.getId(), idNotification);
-        return ResponseEntity.ok(new ResponseAPI(null));
+    }
+
+    @PutMapping("/mark-all-as-read")
+    void markAllAsRead(@AuthenticationPrincipal User user) {
+        notificationService.markAllAsRead(user.getId());
+    }
+
+    @DeleteMapping("/delete-all")
+    void deleteAllNotifications(@AuthenticationPrincipal User user, @PathParam("idNotification") UUID idNotification) {
+        notificationService.deleteAllNotifications(idNotification, user.getId());
+    }
+
+    @DeleteMapping("/delete-notification/{idNotification}")
+    void deleteNotification(@AuthenticationPrincipal User user, @PathVariable UUID idNotification) {
+        notificationService.deleteNotification(user.getId(), idNotification);
     }
 
 }

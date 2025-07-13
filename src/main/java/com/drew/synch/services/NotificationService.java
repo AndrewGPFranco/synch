@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -39,7 +37,7 @@ public class NotificationService {
         }
     }
 
-    public List<OutputNotificationAccessTableDTO> checkIfContainsNewNotifications(UUID idUser) {
+    public Set<OutputNotificationAccessTableDTO> checkIfContainsNewNotifications(UUID idUser) {
         try {
             Integer amount = notificationAccessTableRepository.checkIfContainsNewNotifications(idUser);
 
@@ -47,7 +45,7 @@ public class NotificationService {
                 List<NotificationAccessTable> allNotifications = notificationAccessTableRepository.findAll();
 
                 if (!allNotifications.isEmpty()) {
-                    List<OutputNotificationAccessTableDTO> notificationUser = new ArrayList<>();
+                    Set<OutputNotificationAccessTableDTO> notificationUser = new HashSet<>();
 
                     for (NotificationAccessTable notification : allNotifications) {
                         boolean has = notification.listUsers().stream()
@@ -58,7 +56,9 @@ public class NotificationService {
 
                             for (NotificationAccessUser notificationAccessUser : listNotificationNotRead) {
                                 if (notificationAccessUser.getNotification().equals(notification)) {
-                                    notificationUser.add(OutputNotificationAccessTableDTO.builder().creatorUser(
+                                    notificationUser.add(OutputNotificationAccessTableDTO.builder()
+                                            .idNotification(notification.getId())
+                                            .creatorUser(
                                                     createUserDTOCreatorNotification(notification.getUserOwner())
                                             )
                                             .messageContent(notification.getContentMessage())
@@ -72,7 +72,7 @@ public class NotificationService {
                 }
             }
 
-            return new ArrayList<>();
+            return new HashSet<>();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("Ocorreu um erro ao tentar obter novas notificações!");
@@ -90,5 +90,43 @@ public class NotificationService {
             log.error(e.getMessage(), e);
             throw new RuntimeException("Ocorreu um erro ao atualizar a leitura da notificação!");
         }
+    }
+
+    public void markAllAsRead(UUID idUser) {
+        try {
+            notificationAccessUserRepository.markAllAsReadByUser(idUser);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("Ocorreu um erro ao atualizar a leitura das notificações!");
+        }
+    }
+
+    public void deleteAllNotifications(UUID idNotification, UUID idUser) {
+        try {
+            markAsExpiredNotification(idNotification, idUser);
+            notificationAccessUserRepository.deleteAllByUser(idUser);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("Ocorreu um erro ao remover todas as notificações!");
+        }
+    }
+
+    public void deleteNotification(UUID idUser, UUID idNotification) {
+        try {
+            markAsExpiredNotification(idNotification, idUser);
+            notificationAccessUserRepository.deleteNotificationByUser(idUser, idNotification);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("Ocorreu um erro ao remover notificação!");
+        }
+    }
+
+    public boolean checkIfItHasUserNotifications(UUID idNotification, UUID idUser) {
+        return notificationAccessUserRepository.checkIfItHasUserNotifications(idNotification, idUser) > 0;
+    }
+
+    public void markAsExpiredNotification(UUID idNotification, UUID idUser) {
+        if (!checkIfItHasUserNotifications(idNotification, idUser))
+            notificationAccessTableRepository.markAsExpiredNotification(idNotification);
     }
 }
