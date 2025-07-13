@@ -39,6 +39,8 @@ public class AuthController {
             return ResponseEntity.ok().body(new ResponseAPI(token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest().body(new ResponseAPI(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ResponseAPI("Ocorreu um erro ao processar o login!"));
         }
     }
 
