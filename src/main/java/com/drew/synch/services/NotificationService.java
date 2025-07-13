@@ -51,17 +51,15 @@ public class NotificationService {
                         boolean has = notification.listUsers().stream()
                                 .anyMatch(user -> user.id().equals(idUser));
                         if (has) {
-                            List<NotificationAccessUser> listNotificationNotRead = notification.getNotificationUsers()
-                                    .stream().filter(n -> !n.isWasRead()).toList();
+                            List<NotificationAccessUser> listNotificationNotRead = notification.getNotificationUsers();
 
                             for (NotificationAccessUser notificationAccessUser : listNotificationNotRead) {
                                 if (notificationAccessUser.getNotification().equals(notification)) {
                                     notificationUser.add(OutputNotificationAccessTableDTO.builder()
                                             .idNotification(notification.getId())
-                                            .creatorUser(
-                                                    createUserDTOCreatorNotification(notification.getUserOwner())
-                                            )
+                                            .creatorUser(createUserDTOCreatorNotification(notification.getUserOwner()))
                                             .messageContent(notification.getContentMessage())
+                                            .wasRead(notificationAccessUser.isWasRead())
                                             .build());
                                 }
                             }

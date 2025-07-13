@@ -11,6 +11,7 @@ import java.util.UUID;
 public record OutputNotificationAccessTableDTO(
         @NotNull UUID idNotification,
         @NotNull UserDTO creatorUser,
-        @NotBlank String messageContent
+        @NotBlank String messageContent,
+        @NotNull boolean wasRead
 ) {
 }
