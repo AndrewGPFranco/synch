@@ -34,7 +34,7 @@ public class UserFacadeManagement {
     public List<UserDTO> returningListUserDTOs(List<User> users) {
         List<UserDTO> usersDTO = new ArrayList<>(users.size());
 
-        users.forEach(u -> usersDTO.add(new UserDTO(u.getName(), u.getEmail(), u.getNickname())));
+        users.forEach(u -> usersDTO.add(new UserDTO(u.getId(), u.getName(), u.getEmail(), u.getNickname())));
 
         return usersDTO;
     }

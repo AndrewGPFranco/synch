@@ -1,15 +1,17 @@
 package com.drew.synch.controllers;
 
-import com.drew.synch.dtos.notification.NotificationAccessTableDTO;
+import com.drew.synch.dtos.ResponseAPI;
+import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
+import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.services.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,12 +21,18 @@ class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/new/access-table")
-    ResponseEntity<?> createNewNotification(@AuthenticationPrincipal User user,
-                                            @RequestBody NotificationAccessTableDTO dto) {
+    ResponseEntity<ResponseAPI> createNewNotification(@AuthenticationPrincipal User user,
+                                                      @RequestBody InputNotificationAccessTableDTO dto) {
         dto.setUserOwner(user);
         notificationService.createNewNotification(dto);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseAPI("Notificação criada!"));
+    }
+
+    @GetMapping("/check-contains-notifications")
+    ResponseEntity<ResponseAPI> checkIfContainsNewNotifications(@AuthenticationPrincipal User user) {
+        List<OutputNotificationAccessTableDTO> outputNotificationAccessTableDTOS = notificationService.checkIfContainsNewNotifications(user.getId());
+        return ResponseEntity.ok(new ResponseAPI(outputNotificationAccessTableDTOS));
     }
 
 }

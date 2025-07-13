@@ -1,6 +1,6 @@
 package com.drew.synch.mappers.notification;
 
-import com.drew.synch.dtos.notification.NotificationAccessTableDTO;
+import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
 import com.drew.synch.entities.NotificationAccessTable;
 import com.drew.synch.facades.UserFacadeManagement;
 import io.micrometer.common.lang.NonNull;
@@ -15,7 +15,7 @@ public class NotificationMapper {
 
     private final UserFacadeManagement userFacade;
 
-    public NotificationAccessTable dtoToNotificationAccessTable(@NonNull NotificationAccessTableDTO dto) {
+    public NotificationAccessTable dtoToNotificationAccessTable(@NonNull InputNotificationAccessTableDTO dto) {
         return NotificationAccessTable.builder()
                 .contentMessage(dto.getMessage())
                 .createdAt(LocalDateTime.now())

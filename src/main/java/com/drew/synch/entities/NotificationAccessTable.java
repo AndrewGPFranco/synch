@@ -4,9 +4,7 @@ import com.drew.synch.dtos.user.UserDTO;
 import com.drew.synch.interfaces.NotificationBase;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -59,6 +59,7 @@ public class NotificationAccessTable extends NotificationBase {
     public List<UserDTO> listUsers() {
         return this.users.stream()
                 .map(u -> UserDTO.builder()
+                        .id(u.getId())
                         .name(u.getName())
                         .email(u.getEmail())
                         .nickname(u.getNickname())
