@@ -1,5 +1,6 @@
 package com.drew.synch.controllers;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.drew.synch.dtos.user.AuthRequestDTO;
 import com.drew.synch.dtos.ResponseAPI;
 import com.drew.synch.dtos.user.UserInputDTO;
@@ -39,6 +40,8 @@ public class AuthController {
             return ResponseEntity.ok().body(new ResponseAPI(token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest().body(new ResponseAPI(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ResponseAPI("Ocorreu um erro ao processar o login!"));
         }
     }
 
@@ -52,6 +55,19 @@ public class AuthController {
     public ResponseEntity<ResponseAPI> getUserById(@Valid @PathVariable @NotNull UUID id) {
         UserOutputDTO user = authService.getUserOutputById(id);
         return ResponseEntity.ok().body(new ResponseAPI(user));
+    }
+
+    @GetMapping("/valid-token/{token}")
+    ResponseEntity<Boolean> tokenIsValid(@PathVariable String token) {
+        try {
+            if (token == null || token.equals("null") || token.isEmpty()) return ResponseEntity.ok().body(false);
+
+            jwtService.validateToken(token);
+            return ResponseEntity.ok().body(true);
+        } catch (TokenExpiredException e) {
+            // Retornando status 200 pois não é um erro, foi somente uma verificação!
+            return ResponseEntity.ok().body(false);
+        }
     }
 
 }

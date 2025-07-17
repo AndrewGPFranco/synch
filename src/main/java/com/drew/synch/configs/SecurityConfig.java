@@ -35,7 +35,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     private final SecurityFilterComponent securityFilterComponent;
 
-    private static final String[] WHITE_LIST = {"/api/v1/user/login", "/api/v1/user/register"};
+    private static final String[] WHITE_LIST = {
+            "/api/v1/user/login",
+            "/api/v1/user/register",
+            "/api/v1/user/valid-token/**"
+    };
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
