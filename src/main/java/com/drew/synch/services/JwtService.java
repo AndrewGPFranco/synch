@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.drew.synch.entities.User;
 import com.drew.synch.enums.RoleType;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +45,8 @@ public class JwtService {
                     .build()
                     .verify(token)
                     .getSubject();
+        } catch (TokenExpiredException e) {
+            throw new TokenExpiredException("O token não esta mais válido!", e.getExpiredOn());
         } catch (JWTVerificationException e) {
             throw new JWTVerificationException("Ocorreu um erro ao validar o token", e);
         }
