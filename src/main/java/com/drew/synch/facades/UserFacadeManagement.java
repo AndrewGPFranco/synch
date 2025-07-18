@@ -32,10 +32,16 @@ public class UserFacadeManagement {
         return list;
     }
 
-    public List<UserDTO> returningListUserDTOs(List<User> users) {
+    public List<UserDTO> returningListUserDTOs(List<User> users, UUID idUser) {
         List<UserDTO> usersDTO = new ArrayList<>(users.size());
 
-        users.forEach(u -> usersDTO.add(new UserDTO(u.getId(), u.getName(), u.getEmail(), u.getNickname())));
+        users.forEach(u -> {
+            if (idUser.equals(u.getId())) {
+                usersDTO.add(new UserDTO(u.getId(), u.getName(), u.getEmail(), u.getNickname()));
+            } else {
+                usersDTO.add(new UserDTO(null, null, null, u.getNickname()));
+            }
+        });
 
         return usersDTO;
     }

@@ -1,6 +1,7 @@
 package com.drew.synch.dtos.notification;
 
 import com.drew.synch.entities.User;
+import com.drew.synch.enums.NotificationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class InputNotificationAccessTableDTO {
     private User userOwner;
 
     @NotBlank
-    private String message;
+    private NotificationType notificationType;
 
     @NotNull
     @NotEmpty
