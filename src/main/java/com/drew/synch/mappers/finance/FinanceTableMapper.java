@@ -11,10 +11,7 @@ import com.drew.synch.facades.UserFacadeManagement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,14 +33,18 @@ public class FinanceTableMapper {
                 .tableName(financeTable.getTableName())
                 .createdAt(financeTable.getCreatedAt())
                 .updatedAt(financeTable.getUpdatedAt())
-                .expenses(getExpensesByUser(idUser))
-                .users(userFacade.returningListUserDTOs(financeTable.getUsers()))
+                .expenses(getExpensesByUser(idUser, financeTable.getId()))
+                .users(userFacade.returningListUserDTOs(financeTable.getUsers(), idUser))
                 .status(returnStatusTypeString(financeTable.getStatus()))
                 .build();
     }
 
-    private List<OutputExpenseDTO> getExpensesByUser(UUID idUser) {
-        List<Expense> expensesByUser = financeFacade.getExpensesByUser(idUser);
+    private List<OutputExpenseDTO> getExpensesByUser(UUID idUser, UUID idFinanceTable) {
+        Set<Expense> expensesByUser = new HashSet<>(financeFacade.getExpensesByUser(idUser));
+        Set<Expense> externalExpenses = new HashSet<>(financeFacade.getExternalExpensesByUser(idFinanceTable));
+
+        expensesByUser.addAll(externalExpenses);
+
         return expensesByUser.stream().map(expenseMapper::toOutputExpense).collect(Collectors.toList());
     }
 

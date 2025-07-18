@@ -31,4 +31,8 @@ public class FinanceFacadeManagement {
     public @NotNull List<Expense> getExpensesByUser(UUID idUser) {
         return expenseRepository.getExpensesByUser(idUser);
     }
+
+    public @NotNull List<Expense> getExternalExpensesByUser(UUID idFinanceTable) {
+        return expenseRepository.getExternalExpensesByUser(idFinanceTable);
+    }
 }
