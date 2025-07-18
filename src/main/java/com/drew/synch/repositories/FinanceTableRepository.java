@@ -19,6 +19,13 @@ public interface FinanceTableRepository extends JpaRepository<FinanceTable, UUID
     @Query("select ft from FinanceTable ft where ft.user.id = :idUser")
     List<FinanceTable> findTablesByUser(@Param("idUser") UUID idUser);
 
+    @Query("""
+                select distinct f from FinanceTable f
+                left join f.users u
+                where f.user.id = :userId or u.id = :userId
+            """)
+    List<FinanceTable> findExternalTablesByUser(@Param("userId") UUID userId);
+
     @Modifying
     @Transactional
     @Query("update FinanceTable ft set ft.tableName = :newName where ft.id = :idTable and ft.user.id = :idUser")
