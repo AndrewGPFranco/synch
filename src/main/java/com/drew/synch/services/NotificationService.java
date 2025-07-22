@@ -87,7 +87,10 @@ public class NotificationService {
 
     public void markAsReadByUser(UUID idUser, AddUserInListDTO dto) {
         try {
-            addUserNotification(idUser, dto.idNotification(), dto.idTableFinance());
+            NotificationAccessTable notificationAccessTable = notificationAccessTableRepository
+                    .findById(dto.idNotification()).orElseThrow(() -> new NotFoundException("Erro ao encontrar notificação!"));
+
+            addUserNotification(idUser, notificationAccessTable);
 
             notificationAccessUserRepository.markNotificationAsRead(idUser, dto.idNotification());
         } catch (Exception e) {
@@ -96,16 +99,11 @@ public class NotificationService {
         }
     }
 
-    private void addUserNotification(UUID idUser, UUID idNotification, UUID idFinanceTable) {
-        NotificationAccessUser notification = notificationAccessUserRepository.findById(idNotification)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Notificação com id %s não encontrada!", idNotification))
-                );
-
-        String contentMessage = notification.getNotification().getContentMessage();
+    private void addUserNotification(UUID idUser, NotificationAccessTable notification) {
+        String contentMessage = notification.getContentMessage();
 
         if (contentMessage.equals(NotificationType.ACCESS_TABLE.getMessageContent()))
-            financeService.addUserInList(idUser, idFinanceTable);
+            financeService.addUserInList(idUser, notification.getIdFinanceTable());
     }
 
     public void markAllAsRead(UUID idUser) {

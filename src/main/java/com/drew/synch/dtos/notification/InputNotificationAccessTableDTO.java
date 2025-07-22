@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -24,5 +25,8 @@ public class InputNotificationAccessTableDTO {
     @NotNull
     @NotEmpty
     private Set<String> destinationUsers;
+
+    @NotNull
+    private UUID financeTableId;
 
 }

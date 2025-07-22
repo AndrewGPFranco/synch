@@ -22,6 +22,7 @@ public class NotificationMapper {
                 .userOwner(dto.getUserOwner())
                 .notificationUsers(userFacade.returningListUsers(dto.getDestinationUsers()))
                 .wasExpired(false)
+                .idFinanceTable(dto.getFinanceTableId())
                 .build();
     }
 

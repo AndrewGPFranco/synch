@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @Builder
 public record AddUserInListDTO(
-        @NotNull UUID idNotification,
-        @NotNull UUID idTableFinance
+        @NotNull UUID idNotification
 ) {
 }
