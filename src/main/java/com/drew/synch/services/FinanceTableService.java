@@ -4,13 +4,17 @@ import com.drew.synch.dtos.finance.InputEditTableNameDTO;
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
 import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
+import com.drew.synch.exceptions.NotFoundException;
 import com.drew.synch.mappers.finance.FinanceTableMapper;
 import com.drew.synch.repositories.FinanceTableRepository;
+import com.drew.synch.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -18,6 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FinanceTableService {
 
+    private final UserRepository userRepository;
     private final FinanceTableMapper financeTableMapper;
     private final FinanceTableRepository financeTableRepository;
 
@@ -36,7 +41,10 @@ public class FinanceTableService {
     }
 
     public List<OutputFinanceTableDTO> getTablesByUser(UUID id) {
-        List<FinanceTable> userTables = financeTableRepository.findTablesByUser(id);
+        Set<FinanceTable> userTables = new HashSet<>(financeTableRepository.findTablesByUser(id));
+        Set<FinanceTable> externalTablesByUser = new HashSet<>(financeTableRepository.findExternalTablesByUser(id));
+
+        userTables.addAll(externalTablesByUser);
 
         return userTables.stream().map(f -> financeTableMapper.toOutputFinanceTable(f, id)).toList();
     }
@@ -57,6 +65,22 @@ public class FinanceTableService {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(String.format("Ocorreu um erro ao editar o nome da tabela com ID %s.", dto.idTable()));
+        }
+    }
+
+    public void addUserInList(UUID idUser, UUID idTable) {
+        try {
+            financeTableRepository.findById(idTable).ifPresent(financeTable -> {
+                financeTable.getUsers().add(
+                        userRepository.findById(idUser).orElseThrow(
+                                () -> new NotFoundException(String.format("Nenhum usuário encontrado com id: %s", idUser))
+                        )
+                );
+                financeTableRepository.save(financeTable);
+            });
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(String.format("Ocorreu um erro ao adicionar usuário na lista com ID %s.", idTable));
         }
     }
 }

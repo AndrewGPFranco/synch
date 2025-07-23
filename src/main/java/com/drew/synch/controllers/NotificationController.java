@@ -1,6 +1,7 @@
 package com.drew.synch.controllers;
 
 import com.drew.synch.dtos.ResponseAPI;
+import com.drew.synch.dtos.finance.AddUserInListDTO;
 import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
 import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
 import com.drew.synch.entities.User;
@@ -37,9 +38,9 @@ class NotificationController {
         return ResponseEntity.ok(new ResponseAPI(outputNotificationAccessTableDTOS));
     }
 
-    @PutMapping("/mark-as-read-by-user/{idNotification}")
-    void markAsReadByUser(@AuthenticationPrincipal User user, @PathVariable UUID idNotification) {
-        notificationService.markAsReadByUser(user.getId(), idNotification);
+    @PutMapping("/mark-as-read-by-user")
+    void markAsReadByUser(@AuthenticationPrincipal User user, @RequestBody AddUserInListDTO dto) {
+        notificationService.markAsReadByUser(user.getId(), dto);
     }
 
     @PutMapping("/mark-all-as-read")

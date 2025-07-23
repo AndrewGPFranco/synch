@@ -2,6 +2,7 @@ package com.drew.synch.repositories;
 
 import com.drew.synch.entities.Expense;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
     @Transactional
     @Query("delete from Expense e where e.id = :idExpense")
     void deleteExpenseByID(@Param("idExpense") UUID idExpense);
+
+    @Query("select e from Expense e where e.financeTable.id = :idFinanceTable")
+    @NotNull List<Expense> getExternalExpensesByUser(@Param("idFinanceTable") UUID idFinanceTable);
 }

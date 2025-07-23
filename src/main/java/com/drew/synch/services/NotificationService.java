@@ -1,11 +1,14 @@
 package com.drew.synch.services;
 
+import com.drew.synch.dtos.finance.AddUserInListDTO;
 import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
 import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
 import com.drew.synch.dtos.user.UserDTO;
 import com.drew.synch.entities.NotificationAccessTable;
 import com.drew.synch.entities.NotificationAccessUser;
 import com.drew.synch.entities.User;
+import com.drew.synch.enums.NotificationType;
+import com.drew.synch.exceptions.NotFoundException;
 import com.drew.synch.mappers.notification.NotificationMapper;
 import com.drew.synch.repositories.NotificationAccessTableRepository;
 import com.drew.synch.repositories.NotificationAccessUserRepository;
@@ -20,6 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class NotificationService {
 
+    private final FinanceTableService financeService;
     private final NotificationMapper notificationMapper;
     private final NotificationAccessUserRepository notificationAccessUserRepository;
     private final NotificationAccessTableRepository notificationAccessTableRepository;
@@ -81,13 +85,25 @@ public class NotificationService {
         return UserDTO.builder().name(creatorUser.getName()).nickname(creatorUser.getNickname()).build();
     }
 
-    public void markAsReadByUser(UUID idUser, UUID idNotification) {
+    public void markAsReadByUser(UUID idUser, AddUserInListDTO dto) {
         try {
-            notificationAccessUserRepository.markNotificationAsRead(idUser, idNotification);
+            NotificationAccessTable notificationAccessTable = notificationAccessTableRepository
+                    .findById(dto.idNotification()).orElseThrow(() -> new NotFoundException("Erro ao encontrar notificação!"));
+
+            addUserNotification(idUser, notificationAccessTable);
+
+            notificationAccessUserRepository.markNotificationAsRead(idUser, dto.idNotification());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("Ocorreu um erro ao atualizar a leitura da notificação!");
         }
+    }
+
+    private void addUserNotification(UUID idUser, NotificationAccessTable notification) {
+        String contentMessage = notification.getContentMessage();
+
+        if (contentMessage.equals(NotificationType.ACCESS_TABLE.getMessageContent()))
+            financeService.addUserInList(idUser, notification.getIdFinanceTable());
     }
 
     public void markAllAsRead(UUID idUser) {

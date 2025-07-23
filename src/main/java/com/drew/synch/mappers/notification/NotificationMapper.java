@@ -17,11 +17,12 @@ public class NotificationMapper {
 
     public NotificationAccessTable dtoToNotificationAccessTable(@NonNull InputNotificationAccessTableDTO dto) {
         return NotificationAccessTable.builder()
-                .contentMessage(dto.getMessage())
+                .contentMessage(dto.getNotificationType().getMessageContent())
                 .createdAt(LocalDateTime.now())
                 .userOwner(dto.getUserOwner())
                 .notificationUsers(userFacade.returningListUsers(dto.getDestinationUsers()))
                 .wasExpired(false)
+                .idFinanceTable(dto.getFinanceTableId())
                 .build();
     }
 

@@ -40,6 +40,9 @@ public class NotificationAccessTable extends NotificationBase {
     @Column(name = "was_expired")
     private boolean wasExpired = false;
 
+    @Column(name = "finance_table_id")
+    private UUID idFinanceTable;
+
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<NotificationAccessUser> notificationUsers;
 
