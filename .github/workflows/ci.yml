@@ -21,7 +21,7 @@ jobs:
           java-version: '21'
 
       - name: Build com Maven
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
       - name: Rodar testes unitários
         run: mvn test
