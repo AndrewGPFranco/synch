@@ -37,8 +37,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     private static final String[] WHITE_LIST = {
             "/api/v1/user/login",
-            "/api/v1/user/register",
-            "/api/v1/user/valid-token/**"
+            "/api/v1/user/register"
     };
 
     @Bean
@@ -66,7 +65,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
