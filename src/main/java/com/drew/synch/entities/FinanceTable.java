@@ -1,6 +1,5 @@
 package com.drew.synch.entities;
 
-import com.drew.synch.enums.StatusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -53,16 +52,11 @@ public class FinanceTable {
     @OneToMany(mappedBy = "financeTable", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Expense> expenses;
 
-    @Column(length = 15)
-    @Enumerated(EnumType.STRING)
-    private StatusType status;
-
-    public FinanceTable(String tableName, List<User> users, List<Expense> expenses, User user, StatusType status) {
+    public FinanceTable(String tableName, List<User> users, List<Expense> expenses, User user) {
         this.tableName = tableName;
         this.users = users;
         this.expenses = expenses;
         this.user = user;
-        this.status = status;
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.drew.synch.dtos.finance.OutputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.Expense;
 import com.drew.synch.entities.FinanceTable;
-import com.drew.synch.enums.StatusType;
 import com.drew.synch.facades.FinanceFacadeManagement;
 import com.drew.synch.facades.UserFacadeManagement;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class FinanceTableMapper {
 
     public FinanceTable toFinanceTable(InputFinanceTableDTO dto, UUID idOwner) {
         return new FinanceTable(dto.tableName(), userFacade.returningListUsers(List.of(idOwner)), new ArrayList<>(),
-                userFacade.returningListUsers(Collections.singletonList(idOwner)).getFirst(), StatusType.TODO);
+                userFacade.returningListUsers(Collections.singletonList(idOwner)).getFirst());
     }
 
     public OutputFinanceTableDTO toOutputFinanceTable(FinanceTable financeTable, UUID idUser) {
@@ -35,7 +34,6 @@ public class FinanceTableMapper {
                 .updatedAt(financeTable.getUpdatedAt())
                 .expenses(getExpensesByUser(idUser, financeTable.getId()))
                 .users(userFacade.returningListUserDTOs(financeTable.getUsers(), idUser))
-                .status(returnStatusTypeString(financeTable.getStatus()))
                 .build();
     }
 
@@ -46,14 +44,6 @@ public class FinanceTableMapper {
         expensesByUser.addAll(externalExpenses);
 
         return expensesByUser.stream().map(expenseMapper::toOutputExpense).collect(Collectors.toList());
-    }
-
-    private String returnStatusTypeString(StatusType status) {
-        return switch (status) {
-            case COMPLETED -> StatusType.COMPLETED.getDescription();
-            case ONGOING -> StatusType.ONGOING.getDescription();
-            case TODO -> StatusType.TODO.getDescription();
-        };
     }
 
 }
