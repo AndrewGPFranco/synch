@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +31,11 @@ class FinanceTableController {
 
     @GetMapping(value = "/tables")
     ResponseEntity<ResponseAPI> getTablesByUser(@AuthenticationPrincipal User user) {
-        List<OutputFinanceTableDTO> tables = service.getTablesByUser(user.getId());
+        List<OutputFinanceTableDTO> tables = service.getTablesByUser(user.getId())
+                .stream()
+                .sorted(Comparator.comparing(OutputFinanceTableDTO::tableName))
+                .toList();
+
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseAPI(tables));
     }
 

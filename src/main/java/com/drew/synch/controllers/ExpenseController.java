@@ -1,13 +1,17 @@
 package com.drew.synch.controllers;
 
+import com.drew.synch.dtos.ResponseAPI;
 import com.drew.synch.dtos.finance.InputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputExpenseDTO;
+import com.drew.synch.entities.User;
 import com.drew.synch.services.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +30,12 @@ class ExpenseController {
     @DeleteMapping("/{idExpense}")
     void deleteExpense(@PathVariable UUID idExpense) {
         service.deleteExpenseByIDAndUser(idExpense);
+    }
+
+    @GetMapping("/{idTable}")
+    ResponseEntity<ResponseAPI> getTablesByUser(@PathVariable UUID idTable, @AuthenticationPrincipal User user) {
+        List<OutputExpenseDTO> expenses = service.getExpenseByID(idTable, user.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseAPI(expenses));
     }
 
 }

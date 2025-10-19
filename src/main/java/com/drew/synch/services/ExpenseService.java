@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -35,6 +37,7 @@ public class ExpenseService {
         if (financeTable.getExpenses() == null) financeTable.setExpenses(new ArrayList<>());
 
         financeTable.getExpenses().add(expense);
+        financeTable.setUpdatedAt(LocalDateTime.now());
 
         financeFacade.saveFinanceTable(financeTable);
 
@@ -50,4 +53,15 @@ public class ExpenseService {
         }
     }
 
+    public List<OutputExpenseDTO> getExpenseByID(UUID idTable, UUID idUser) {
+        try {
+            List<Expense> expensesByUser = financeFacade.getExpensesByUser(idUser);
+
+            return expensesByUser.stream().filter(e -> e.getFinanceTable().getId().equals(idTable))
+                    .map(expenseMapper::toOutputExpense).toList();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(String.format("Ocorreu um erro ao encontrar as despesas com o ID da tabela: %s.", idTable));
+        }
+    }
 }

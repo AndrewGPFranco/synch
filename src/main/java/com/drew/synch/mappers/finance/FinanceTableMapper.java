@@ -43,7 +43,8 @@ public class FinanceTableMapper {
 
         expensesByUser.addAll(externalExpenses);
 
-        return expensesByUser.stream().map(expenseMapper::toOutputExpense).collect(Collectors.toList());
+        return expensesByUser.stream().filter(e -> e.getFinanceTable().getId().equals(idFinanceTable))
+                .map(expenseMapper::toOutputExpense).collect(Collectors.toList());
     }
 
 }
