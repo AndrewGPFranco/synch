@@ -64,4 +64,21 @@ public class ExpenseService {
             throw new RuntimeException(String.format("Ocorreu um erro ao encontrar as despesas com o ID da tabela: %s.", idTable));
         }
     }
+
+    public Double calculaDespesas(UUID idTable) {
+        FinanceTable financeTable = financeFacade.getFinanceTableById(idTable);
+
+        List<Expense> expenses = financeTable.getExpenses();
+
+        double valor = 0.0;
+
+        if (expenses.isEmpty())
+            return valor;
+
+        for (Expense expense : expenses) {
+            valor += expense.getAmount();
+        }
+
+        return valor;
+    }
 }

@@ -38,4 +38,10 @@ class ExpenseController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseAPI(expenses));
     }
 
+    @GetMapping("/calcula-despesas/{idTable}")
+    ResponseEntity<Double> calculaDespesas(@PathVariable UUID idTable) {
+        Double valorDespesas = service.calculaDespesas(idTable);
+        return ResponseEntity.ok().body(valorDespesas);
+    }
+
 }
