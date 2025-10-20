@@ -2,7 +2,7 @@ package com.drew.synch.services;
 
 import com.drew.synch.dtos.finance.AddUserInListDTO;
 import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
-import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
+import com.drew.synch.dtos.notification.OutputNotificationDTO;
 import com.drew.synch.dtos.user.UserDTO;
 import com.drew.synch.entities.NotificationAccessTable;
 import com.drew.synch.entities.NotificationAccessUser;
@@ -41,7 +41,7 @@ public class NotificationService {
         }
     }
 
-    public Set<OutputNotificationAccessTableDTO> checkIfContainsNewNotifications(UUID idUser) {
+    public Set<OutputNotificationDTO> checkIfContainsNewNotifications(UUID idUser) {
         try {
             Integer amount = notificationAccessTableRepository.checkIfContainsNewNotifications(idUser);
 
@@ -49,7 +49,7 @@ public class NotificationService {
                 List<NotificationAccessTable> allNotifications = notificationAccessTableRepository.findAll();
 
                 if (!allNotifications.isEmpty()) {
-                    Set<OutputNotificationAccessTableDTO> notificationUser = new HashSet<>();
+                    Set<OutputNotificationDTO> notificationUser = new HashSet<>();
 
                     for (NotificationAccessTable notification : allNotifications) {
                         boolean has = notification.listUsers().stream()
@@ -59,11 +59,13 @@ public class NotificationService {
 
                             for (NotificationAccessUser notificationAccessUser : listNotificationNotRead) {
                                 if (notificationAccessUser.getNotification().equals(notification)) {
-                                    notificationUser.add(OutputNotificationAccessTableDTO.builder()
+                                    notificationUser.add(OutputNotificationDTO.builder()
                                             .idNotification(notification.getId())
                                             .creatorUser(createUserDTOCreatorNotification(notification.getUserOwner()))
                                             .messageContent(notification.getContentMessage())
                                             .wasRead(notificationAccessUser.isWasRead())
+                                            .notificationType(NotificationType.ACCESS_TABLE.getTitle())
+                                            .createdAt(notification.getCreatedAt().toLocalDate())
                                             .build());
                                 }
                             }

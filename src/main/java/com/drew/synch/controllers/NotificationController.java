@@ -3,7 +3,7 @@ package com.drew.synch.controllers;
 import com.drew.synch.dtos.ResponseAPI;
 import com.drew.synch.dtos.finance.AddUserInListDTO;
 import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
-import com.drew.synch.dtos.notification.OutputNotificationAccessTableDTO;
+import com.drew.synch.dtos.notification.OutputNotificationDTO;
 import com.drew.synch.entities.User;
 import com.drew.synch.services.NotificationService;
 import jakarta.websocket.server.PathParam;
@@ -34,8 +34,8 @@ class NotificationController {
 
     @GetMapping("/check-contains-notifications")
     ResponseEntity<ResponseAPI> checkIfContainsNewNotifications(@AuthenticationPrincipal User user) {
-        Set<OutputNotificationAccessTableDTO> outputNotificationAccessTableDTOS = notificationService.checkIfContainsNewNotifications(user.getId());
-        return ResponseEntity.ok(new ResponseAPI(outputNotificationAccessTableDTOS));
+        Set<OutputNotificationDTO> outputNotificationDTOS = notificationService.checkIfContainsNewNotifications(user.getId());
+        return ResponseEntity.ok(new ResponseAPI(outputNotificationDTOS));
     }
 
     @PutMapping("/mark-as-read-by-user")
