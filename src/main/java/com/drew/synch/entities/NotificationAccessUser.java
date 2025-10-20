@@ -34,11 +34,15 @@ public class NotificationAccessUser {
     @Column(name = "was_read")
     private boolean wasRead = false;
 
+    @Column(name = "was_answered")
+    private boolean wasAnswered = false;
+
     @Override
     public String toString() {
         return "NotificationAccessUser{" +
                 "id=" + id +
                 ", wasRead=" + wasRead +
+                ", wasAnswered=" + wasAnswered +
                 '}';
     }
 }

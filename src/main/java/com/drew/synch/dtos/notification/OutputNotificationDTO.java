@@ -15,6 +15,7 @@ public record OutputNotificationDTO(
         @NotNull UserDTO creatorUser,
         @NotBlank String messageContent,
         @NotNull boolean wasRead,
+        @NotNull boolean wasAnswered,
         @NotNull String notificationType
 ) {
 }

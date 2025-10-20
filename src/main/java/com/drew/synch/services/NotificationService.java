@@ -66,6 +66,7 @@ public class NotificationService {
                                             .wasRead(notificationAccessUser.isWasRead())
                                             .notificationType(NotificationType.ACCESS_TABLE.getTitle())
                                             .createdAt(notification.getCreatedAt().toLocalDate())
+                                            .wasAnswered(notificationAccessUser.isWasAnswered())
                                             .build());
                                 }
                             }
@@ -92,9 +93,11 @@ public class NotificationService {
             NotificationAccessTable notificationAccessTable = notificationAccessTableRepository
                     .findById(dto.idNotification()).orElseThrow(() -> new NotFoundException("Erro ao encontrar notificação!"));
 
-            addUserNotification(idUser, notificationAccessTable);
+            if (dto.wasAccepted())
+                addUserNotification(idUser, notificationAccessTable);
 
             notificationAccessUserRepository.markNotificationAsRead(idUser, dto.idNotification());
+            notificationAccessUserRepository.markNotificationAsAnswered(idUser, dto.idNotification());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("Ocorreu um erro ao atualizar a leitura da notificação!");

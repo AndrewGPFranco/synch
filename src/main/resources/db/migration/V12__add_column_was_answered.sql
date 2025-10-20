@@ -1,0 +1,2 @@
+alter table notification_access_users
+add column was_answered BOOLEAN
