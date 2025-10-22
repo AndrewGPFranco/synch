@@ -15,6 +15,7 @@ public record UserOutputDTO(
         @NotBlank String fullname,
         @NotBlank String nickname,
         @NotNull LocalDate birthDate,
-        @NotNull Set<RoleType> roles
+        @NotNull Set<RoleType> roles,
+        @NotBlank String pathImage
 ) {
 }

@@ -25,7 +25,8 @@ public class UserMapper {
 
     public UserOutputDTO entityToDtoOutput(User user) {
         return UserOutputDTO.builder().name(user.getName()).email(user.getEmail()).fullname(user.getFullname())
-                .nickname(user.getNickname()).birthDate(user.getBirthDate()).roles(user.getRoles()).build();
+                .nickname(user.getNickname()).birthDate(user.getBirthDate()).roles(user.getRoles())
+                .pathImage(user.getPathImage()).build();
     }
 
 }
