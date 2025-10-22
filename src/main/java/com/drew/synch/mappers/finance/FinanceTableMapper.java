@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -37,14 +36,16 @@ public class FinanceTableMapper {
                 .build();
     }
 
-    private List<OutputExpenseDTO> getExpensesByUser(UUID idUser, UUID idFinanceTable) {
+    public List<OutputExpenseDTO> getExpensesByUser(UUID idUser, UUID idFinanceTable) {
         Set<Expense> expensesByUser = new HashSet<>(financeFacade.getExpensesByUser(idUser));
         Set<Expense> externalExpenses = new HashSet<>(financeFacade.getExternalExpensesByUser(idFinanceTable));
 
         expensesByUser.addAll(externalExpenses);
 
-        return expensesByUser.stream().filter(e -> e.getFinanceTable().getId().equals(idFinanceTable))
-                .map(expenseMapper::toOutputExpense).collect(Collectors.toList());
+        return expensesByUser.stream()
+                .filter(e -> e.getFinanceTable().getId().equals(idFinanceTable))
+                .map(expenseMapper::toOutputExpense)
+                .toList();
     }
 
 }

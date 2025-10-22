@@ -6,6 +6,7 @@ import com.drew.synch.entities.Expense;
 import com.drew.synch.entities.FinanceTable;
 import com.drew.synch.facades.FinanceFacadeManagement;
 import com.drew.synch.mappers.finance.ExpenseMapper;
+import com.drew.synch.mappers.finance.FinanceTableMapper;
 import com.drew.synch.repositories.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class ExpenseService {
 
     private final ExpenseMapper expenseMapper;
     private final ExpenseRepository expenseRepository;
+    private final FinanceTableMapper financeTableMapper;
     private final FinanceFacadeManagement financeFacade;
 
     public OutputExpenseDTO createExpense(InputExpenseDTO dto) {
@@ -55,13 +57,7 @@ public class ExpenseService {
 
     public List<OutputExpenseDTO> getExpenseByID(UUID idTable, UUID idUser) {
         try {
-            List<Expense> expensesByUser = financeFacade.getExpensesByUser(idUser);
-            List<Expense> externalExpensesByUser = financeFacade.getExternalExpensesByUser(idTable);
-
-            expensesByUser.addAll(externalExpensesByUser);
-
-            return expensesByUser.stream().filter(e -> e.getFinanceTable().getId().equals(idTable))
-                    .map(expenseMapper::toOutputExpense).toList();
+            return financeTableMapper.getExpensesByUser(idUser, idTable);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(String.format("Ocorreu um erro ao encontrar as despesas com o ID da tabela: %s.", idTable));
