@@ -56,6 +56,9 @@ public class ExpenseService {
     public List<OutputExpenseDTO> getExpenseByID(UUID idTable, UUID idUser) {
         try {
             List<Expense> expensesByUser = financeFacade.getExpensesByUser(idUser);
+            List<Expense> externalExpensesByUser = financeFacade.getExternalExpensesByUser(idTable);
+
+            expensesByUser.addAll(externalExpensesByUser);
 
             return expensesByUser.stream().filter(e -> e.getFinanceTable().getId().equals(idTable))
                     .map(expenseMapper::toOutputExpense).toList();
