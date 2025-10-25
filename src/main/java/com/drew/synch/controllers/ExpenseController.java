@@ -3,6 +3,7 @@ package com.drew.synch.controllers;
 import com.drew.synch.dtos.ResponseAPI;
 import com.drew.synch.dtos.finance.InputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputExpenseDTO;
+import com.drew.synch.dtos.finance.OutputReporteCalculoDespesa;
 import com.drew.synch.entities.User;
 import com.drew.synch.services.ExpenseService;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +40,9 @@ class ExpenseController {
     }
 
     @GetMapping("/calcula-despesas/{idTable}")
-    ResponseEntity<Double> calculaDespesas(@PathVariable UUID idTable) {
+    ResponseEntity<OutputReporteCalculoDespesa> calculaDespesas(@PathVariable UUID idTable) {
         Double valorDespesas = service.calculaDespesas(idTable);
-        return ResponseEntity.ok().body(valorDespesas);
+        return ResponseEntity.ok().body(new OutputReporteCalculoDespesa(valorDespesas));
     }
 
 }
