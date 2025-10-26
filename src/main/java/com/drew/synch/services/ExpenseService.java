@@ -4,6 +4,7 @@ import com.drew.synch.dtos.finance.InputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputExpenseDTO;
 import com.drew.synch.entities.Expense;
 import com.drew.synch.entities.FinanceTable;
+import com.drew.synch.exceptions.NotFoundException;
 import com.drew.synch.facades.FinanceFacadeManagement;
 import com.drew.synch.mappers.finance.ExpenseMapper;
 import com.drew.synch.mappers.finance.FinanceTableMapper;
@@ -45,7 +46,7 @@ public class ExpenseService {
 
         return expenseMapper.toOutputExpense(expense);
     }
-    
+
     public void deleteExpenseByIDAndUser(UUID idExpense) {
         try {
             expenseRepository.deleteExpenseByID(idExpense);
@@ -79,5 +80,23 @@ public class ExpenseService {
         }
 
         return valor;
+    }
+
+    public void duplicaDespesa(UUID idExpense) {
+        Expense expense = expenseRepository.findById(idExpense).orElseThrow(() ->
+                new NotFoundException(String.format("Despesa com o ID: %s não foi encontrada!", idExpense)));
+
+        Expense novaDespesa = Expense.builder()
+                .name(expense.getName())
+                .month(expense.getMonth())
+                .amount(expense.getAmount())
+                .financeTable(expense.getFinanceTable())
+                .dueDate(expense.getDueDate())
+                .paymentDate(expense.getPaymentDate())
+                .paymentCategory(expense.getPaymentCategory())
+                .link(expense.getLink())
+                .build();
+
+        expenseRepository.save(novaDespesa);
     }
 }

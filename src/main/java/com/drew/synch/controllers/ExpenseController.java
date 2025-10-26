@@ -45,4 +45,9 @@ class ExpenseController {
         return ResponseEntity.ok().body(new OutputReporteCalculoDespesa(valorDespesas));
     }
 
+    @PostMapping("/duplicate/{idExpense}")
+    void duplicaDespesa(@PathVariable UUID idExpense) {
+        service.duplicaDespesa(idExpense);
+    }
+
 }
