@@ -24,6 +24,11 @@ public class FinanceFacadeManagement {
                 new NotFoundException(String.format("Nenhuma tabela encontrada com o ID: %s", idTable)));
     }
 
+    public Expense getExpenseById(UUID idExpense) {
+        return expenseRepository.findById(idExpense).orElseThrow(() ->
+                new NotFoundException(String.format("Despesa com o ID: %s não foi encontrada!", idExpense)));
+    }
+
     public void saveFinanceTable(FinanceTable financeTable) {
         financeTableRepository.save(financeTable);
     }

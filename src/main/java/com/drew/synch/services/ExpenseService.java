@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,8 +84,7 @@ public class ExpenseService {
     }
 
     public void duplicaDespesa(UUID idExpense) {
-        Expense expense = expenseRepository.findById(idExpense).orElseThrow(() ->
-                new NotFoundException(String.format("Despesa com o ID: %s não foi encontrada!", idExpense)));
+        Expense expense = financeFacade.getExpenseById(idExpense);
 
         Expense novaDespesa = Expense.builder()
                 .name(expense.getName())
@@ -98,5 +98,15 @@ public class ExpenseService {
                 .build();
 
         expenseRepository.save(novaDespesa);
+    }
+
+    public void marcarDespesaComoPaga(UUID idExpense) {
+        LocalDate data = LocalDate.now();
+
+        Expense expense = financeFacade.getExpenseById(idExpense);
+
+        expense.setPaymentDate(data);
+
+        expenseRepository.save(expense);
     }
 }

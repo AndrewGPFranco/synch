@@ -50,4 +50,9 @@ class ExpenseController {
         service.duplicaDespesa(idExpense);
     }
 
+    @PutMapping("/marcar-como-paga/{idExpense}")
+    void marcarDespesaComoPaga(@PathVariable UUID idExpense) {
+        service.marcarDespesaComoPaga(idExpense);
+    }
+
 }
