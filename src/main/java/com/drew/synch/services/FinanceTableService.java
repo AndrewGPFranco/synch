@@ -4,10 +4,14 @@ import com.drew.synch.dtos.finance.InputEditTableNameDTO;
 import com.drew.synch.dtos.finance.InputFinanceTableDTO;
 import com.drew.synch.dtos.finance.OutputFinanceTableDTO;
 import com.drew.synch.entities.FinanceTable;
+import com.drew.synch.entities.User;
 import com.drew.synch.exceptions.NotFoundException;
 import com.drew.synch.mappers.finance.FinanceTableMapper;
 import com.drew.synch.repositories.FinanceTableRepository;
 import com.drew.synch.repositories.UserRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -80,4 +84,19 @@ public class FinanceTableService {
             throw new RuntimeException(String.format("Ocorreu um erro ao adicionar usuário na lista com ID %s.", idTable));
         }
     }
+
+    public boolean verificaUsuarioJaTemAcesso(@Valid @NotBlank String emailUsuarioDestino, @NotNull UUID financeTableId) {
+        User usuario = userRepository.findByEmail(emailUsuarioDestino);
+
+        if (usuario == null)
+            throw new RuntimeException(String.format("Nenhum usuário com o e-mail: %s foi encontrado!", emailUsuarioDestino));
+
+        List<OutputFinanceTableDTO> tablesByUser = getTablesByUser(usuario.getId());
+        return tablesByUser.stream().anyMatch(t -> t.idTable().equals(financeTableId));
+    }
+
+    public List<FinanceTable> getTabelasPropriasDoUsuario(UUID idUsuario) {
+        return financeTableRepository.findTablesByUser(idUsuario);
+    }
+
 }

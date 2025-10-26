@@ -4,6 +4,7 @@ import com.drew.synch.dtos.finance.AddUserInListDTO;
 import com.drew.synch.dtos.notification.InputNotificationAccessTableDTO;
 import com.drew.synch.dtos.notification.OutputNotificationDTO;
 import com.drew.synch.dtos.user.UserDTO;
+import com.drew.synch.entities.FinanceTable;
 import com.drew.synch.entities.NotificationAccessTable;
 import com.drew.synch.entities.NotificationAccessUser;
 import com.drew.synch.entities.User;
@@ -30,6 +31,21 @@ public class NotificationService {
 
     public void createNewNotification(InputNotificationAccessTableDTO dto) {
         try {
+            User usuarioQueEnviouConvite = dto.getUserOwner();
+
+            List<FinanceTable> tabelasPropriasDoUsuario = financeService.getTabelasPropriasDoUsuario(usuarioQueEnviouConvite.getId());
+
+            boolean isTabelaDoUsuario = tabelasPropriasDoUsuario.stream().anyMatch(t -> t.getId().equals(dto.getFinanceTableId()));
+
+            if (!isTabelaDoUsuario)
+                throw new RuntimeException("Essa tabela não te pertence, não é possível convidar outras pessoas!");
+
+            String idUsuarioDestino = dto.getDestinationUser();
+            boolean jaTemAcesso = financeService.verificaUsuarioJaTemAcesso(idUsuarioDestino, dto.getFinanceTableId());
+
+            if (jaTemAcesso)
+                throw new RuntimeException(String.format("O usuário com email %s já tem acesso a essa tabela!", dto.getDestinationUser()));
+
             NotificationAccessTable entity = notificationMapper.dtoToNotificationAccessTable(dto);
 
             entity.getNotificationUsers().forEach(user -> user.setNotification(entity));
@@ -37,7 +53,7 @@ public class NotificationService {
             notificationAccessTableRepository.save(entity);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException("Ocorreu um erro ao tentar enviar a notificação!");
+            throw new RuntimeException(e.getMessage());
         }
     }
 

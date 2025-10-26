@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashSet;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class NotificationMapper {
                 .contentMessage(dto.getNotificationType().getMessageContent())
                 .createdAt(LocalDateTime.now())
                 .userOwner(dto.getUserOwner())
-                .notificationUsers(userFacade.returningListUsers(dto.getDestinationUsers()))
+                .notificationUsers(userFacade.returningListUsers(new HashSet<>(Collections.singletonList(dto.getDestinationUser()))))
                 .wasExpired(false)
                 .idFinanceTable(dto.getFinanceTableId())
                 .build();
