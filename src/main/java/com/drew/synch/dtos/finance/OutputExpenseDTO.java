@@ -16,6 +16,7 @@ public record OutputExpenseDTO(
         @NotNull double amount,
         LocalDate paymentDate,
         @NotNull PaymentCategoryType paymentCategory,
-        @NotNull LocalDate dueDate
+        @NotNull LocalDate dueDate,
+        String link
 ) {
 }

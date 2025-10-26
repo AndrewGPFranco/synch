@@ -24,6 +24,7 @@ public class ExpenseMapper {
                 .dueDate(dto.dueDate())
                 .paymentDate(dto.paymentDate())
                 .paymentCategory(dto.paymentCategory())
+                .link(dto.link())
                 .build();
     }
 
@@ -36,6 +37,7 @@ public class ExpenseMapper {
                 .dueDate(expense.getDueDate())
                 .paymentDate(expense.getPaymentDate())
                 .paymentCategory(expense.getPaymentCategory())
+                .link(expense.getLink())
                 .build();
     }
 
