@@ -53,6 +53,9 @@ public class Expense {
     @JoinColumn(name = "finance_table_id")
     private FinanceTable financeTable;
 
+    @Column(name = "link")
+    private String link;
+
     @Override
     public String toString() {
         return "Expense{" +
@@ -64,6 +67,7 @@ public class Expense {
                 ", month=" + month +
                 ", amount=" + amount +
                 ", financeTable=" + financeTable +
+                ", link='" + link + '\'' +
                 '}';
     }
 }
