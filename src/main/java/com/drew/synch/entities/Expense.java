@@ -66,7 +66,6 @@ public class Expense {
                 ", name='" + name + '\'' +
                 ", month=" + month +
                 ", amount=" + amount +
-                ", financeTable=" + financeTable +
                 ", link='" + link + '\'' +
                 '}';
     }

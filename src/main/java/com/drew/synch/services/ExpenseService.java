@@ -85,11 +85,11 @@ public class ExpenseService {
                     despesasACalcular = new ArrayList<>(expenses);
             case A_PAGAR ->
                     despesasACalcular = expenses.stream()
-                            .filter(e -> e.getPaymentDate() != null)
+                            .filter(e -> e.getPaymentDate() == null)
                             .collect(Collectors.toCollection(ArrayList::new));
             case JA_PAGAS ->
                     despesasACalcular = expenses.stream()
-                            .filter(e -> e.getPaymentDate() == null)
+                            .filter(e -> e.getPaymentDate() != null)
                             .collect(Collectors.toCollection(ArrayList::new));
         }
 
