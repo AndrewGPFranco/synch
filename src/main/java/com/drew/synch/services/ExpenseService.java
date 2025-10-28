@@ -1,14 +1,15 @@
 package com.drew.synch.services;
 
+import com.drew.synch.dtos.finance.InputCalculoDespesaDTO;
 import com.drew.synch.dtos.finance.InputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputExpenseDTO;
 import com.drew.synch.entities.Expense;
 import com.drew.synch.entities.FinanceTable;
-import com.drew.synch.exceptions.NotFoundException;
 import com.drew.synch.facades.FinanceFacadeManagement;
 import com.drew.synch.mappers.finance.ExpenseMapper;
 import com.drew.synch.mappers.finance.FinanceTableMapper;
 import com.drew.synch.repositories.ExpenseRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -66,8 +68,8 @@ public class ExpenseService {
         }
     }
 
-    public Double calculaDespesas(UUID idTable) {
-        FinanceTable financeTable = financeFacade.getFinanceTableById(idTable);
+    public Double calculaDespesas(@Valid InputCalculoDespesaDTO dto) {
+        FinanceTable financeTable = financeFacade.getFinanceTableById(dto.idTable());
 
         List<Expense> expenses = financeTable.getExpenses();
 
@@ -76,7 +78,22 @@ public class ExpenseService {
         if (expenses.isEmpty())
             return valor;
 
-        for (Expense expense : expenses) {
+        List<Expense> despesasACalcular = new ArrayList<>();
+
+        switch (dto.operacao()) {
+            case TODAS ->
+                    despesasACalcular = new ArrayList<>(expenses);
+            case A_PAGAR ->
+                    despesasACalcular = expenses.stream()
+                            .filter(e -> e.getPaymentDate() != null)
+                            .collect(Collectors.toCollection(ArrayList::new));
+            case JA_PAGAS ->
+                    despesasACalcular = expenses.stream()
+                            .filter(e -> e.getPaymentDate() == null)
+                            .collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        for (Expense expense : despesasACalcular) {
             valor += expense.getAmount();
         }
 

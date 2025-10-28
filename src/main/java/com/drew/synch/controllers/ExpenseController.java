@@ -1,11 +1,13 @@
 package com.drew.synch.controllers;
 
 import com.drew.synch.dtos.ResponseAPI;
+import com.drew.synch.dtos.finance.InputCalculoDespesaDTO;
 import com.drew.synch.dtos.finance.InputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputExpenseDTO;
 import com.drew.synch.dtos.finance.OutputReporteCalculoDespesa;
 import com.drew.synch.entities.User;
 import com.drew.synch.services.ExpenseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +41,9 @@ class ExpenseController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseAPI(expenses));
     }
 
-    @GetMapping("/calcula-despesas/{idTable}")
-    ResponseEntity<OutputReporteCalculoDespesa> calculaDespesas(@PathVariable UUID idTable) {
-        Double valorDespesas = service.calculaDespesas(idTable);
+    @PostMapping("/calcula-despesas")
+    ResponseEntity<OutputReporteCalculoDespesa> calculaDespesas(@RequestBody @Valid InputCalculoDespesaDTO dto) {
+        Double valorDespesas = service.calculaDespesas(dto);
         return ResponseEntity.ok().body(new OutputReporteCalculoDespesa(valorDespesas));
     }
 
